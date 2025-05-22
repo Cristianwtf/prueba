@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Pago</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        h1 {
+            color: #4a6741cc;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .payment-methods {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .payment-method {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .payment-method:first-child {
+            border-radius: 5px 0 0 5px;
+        }
+        .payment-method:last-child {
+            border-radius: 0 5px 5px 0;
+        }
+        .payment-method.active {
+            background-color: rgba(74, 103, 65, 0.1);
+            border-color: #4a6741cc;
+            color: #4a6741cc;
+        }
+        .payment-form {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #4a6741cc;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+        
+        }
+        
+        input:focus, select:focus {
+            border-color: #4a6741cc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.2);
+        }
+        input.error, select.error {
+            border-color: #dc3545;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+        .col {
+            flex: 1;
+        }
+        .card-icons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .card-icon {
+            width: 50px;
+            height: 30px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        button {
+            background-color: #4a6741cc;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3c5434;
+        }
+        button:disabled {
+            background-color: #95a991;
+            cursor: not-allowed;
+        }
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+        .paypal-button {
+            background-color: #4a6741cc;
+        }
+        .paypal-button:hover {
+            background-color: #3c5434;
+        }
+        .paypal-button:disabled {
+            background-color: #95a991;
+            cursor: not-allowed;
+        }
+        .order-summary {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid rgba(74, 103, 65, 0.2);
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .summary-total {
+            font-weight: bold;
+            border-top: 1px solid #4a6741cc;
+            padding-top: 10px;
+            margin-top: 10px;
+            color: #4a6741cc;
+        }
+        #paypal-logo {
+            max-width: 150px;
+            display: block;
+            margin: 20px auto;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Finalizar Compra</h1>
+        
+        <div class="payment-methods">
+            <div class="payment-method active" onclick="switchPaymentMethod('card')">
+                <h3>Tarjeta de Crédito</h3>
+            </div>
+            <div class="payment-method" onclick="switchPaymentMethod('paypal')">
+                <h3>PayPal</h3>
+            </div>
+        </div>
+        
+        <div class="form-section active" id="card-form">
+            <div class="payment-form">
+                <div class="card-icons">
+                    <div class="card-icon">VISA</div>
+                    <div class="card-icon">MC</div>
+                    <div class="card-icon">AMEX</div>
+                    <div class="card-icon">DISC</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-number">Número de Tarjeta *</label>
+                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    <div class="error-message" id="card-number-error">Por favor, introduce un número de tarjeta válido</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="expiry">Fecha de Expiración *</label>
+                            <input type="text" id="expiry" placeholder="MM/AA" maxlength="5" required>
+                            <div class="error-message" id="expiry-error">Formato requerido: MM/AA</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="cvv">CVV *</label>
+                            <input type="text" id="cvv" placeholder="123" maxlength="4" required>
+                            <div class="error-message" id="cvv-error">Introduce el código de seguridad</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-name">Nombre en la Tarjeta *</label>
+                    <input type="text" id="card-name" placeholder="Ej. Juan Pérez" required>
+                    <div class="error-message" id="card-name-error">Introduce el nombre como aparece en la tarjeta</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Dirección de Facturación *</label>
+                    <input type="text" id="address" placeholder="Calle y número" required>
+                    <div class="error-message" id="address-error">Introduce tu dirección de facturación</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="city">Ciudad *</label>
+                            <input type="text" id="city" placeholder="Ciudad" required>
+                            <div class="error-message" id="city-error">Introduce tu ciudad</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="postal-code">Código Postal *</label>
+                            <input type="text" id="postal-code" placeholder="28001" required>
+                            <div class="error-message" id="postal-code-error">Introduce tu código postal</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="country">País *</label>
+                    <select id="country" required onchange="updateCurrency()">
+                        <option value="">Selecciona un país</option>
+                        <option value="es">España</option>
+                        <option value="mx">México</option>
+                        <option value="ar">Argentina</option>
+                        <option value="co">Colombia</option>
+                        <option value="cl">Chile</option>
+                        <option value="pe">Perú</option>
+                    </select>
+                    <div class="error-message" id="country-error">Selecciona tu país</div>
+                </div>
+                
+                <button type="button" id="card-pay-button" disabled>Pagar Ahora</button>
+            </div>
+        </div>
+        
+        <div class="form-section" id="paypal-form">
+            <div class="payment-form">
+                <img id="paypal-logo" src="imagenes/paypal.jpg" alt="PayPal Logo" onerror="this.onerror=null; this.src='/api/placeholder/150/60'; this.alt='PayPal Logo (placeholder)';">
+                
+                <div class="form-group">
+                    <label for="paypal-email">Correo Electrónico de PayPal *</label>
+                    <input type="email" id="paypal-email" placeholder="Correo electrónico..." required>
+                    <div class="error-message" id="paypal-email-error">Introduce un correo electrónico válido</div>
+                </div>
+                
+                <p>Serás redirigido a PayPal para completar tu pago de forma segura.</p>
+                
+                <form id="paypal-redirect-form" action="https://www.paypal.com/signin" method="get" target="_blank">
+                    <input type="hidden" name="email" id="paypal-hidden-email">
+                    <input type="hidden" name="amount" value="70.48">
+                    <input type="hidden" name="currency" value="EUR">
+                    <button type="submit" class="paypal-button" id="paypal-button" disabled>Continuar con PayPal</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="order-summary">
+            <h3>Resumen del Pedido</h3>
+            <div class="summary-item">
+                <span>Ignacios con Queso</span>
+                <span id="product1-price">€39.99</span>
+            </div>
+            <div class="summary-item">
+                <span>Modelo Especial</span>
+                <span id="product2-price">€25.50</span>
+            </div>
+            <div class="summary-item">
+                <span>Envío</span>
+                <span id="shipping-price">€4.99</span>
+            </div>
+            <div class="summary-item summary-total">
+                <span>Total</span>
+                <span id="total-price">€70.48</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables para almacenar referencias a los elementos del formulario
+        const cardForm = document.getElementById('card-form');
+        const paypalForm = document.getElementById('paypal-form');
+        const cardPayButton = document.getElementById('card-pay-button');
+        const paypalButton = document.getElementById('paypal-button');
+        const paypalEmail = document.getElementById('paypal-email');
+        const paypalHiddenEmail = document.getElementById('paypal-hidden-email');
+        const paypalRedirectForm = document.getElementById('paypal-redirect-form');
+        
+        // Campos del formulario de tarjeta
+        const cardFields = [
+            'card-number',
+            'expiry',
+            'cvv',
+            'card-name',
+            'address',
+            'city',
+            'postal-code',
+            'country'
+        ];
+        
+        // Datos de precio base en EUR
+        const basePrices = {
+            product1: 39.99,
+            product2: 25.50,
+            shipping: 4.99
+        };
+        
+        // Configuración de monedas por país
+        const currencyConfig = {
+            es: { symbol: '€', code: 'EUR', rate: 1 },
+            mx: { symbol: '$', code: 'MXN', rate: 18.5 },
+            ar: { symbol: '$', code: 'ARS', rate: 950 },
+            co: { symbol: '$', code: 'COP', rate: 4150 },
+            cl: { symbol: '$', code: 'CLP', rate: 930 },
+            pe: { symbol: 'S/', code: 'PEN', rate: 4.05 }
+        };
+        
+        // Función para actualizar precios según el país seleccionado
+        function updateCurrency() {
+            const country = document.getElementById('country').value;
+            
+            if (!country || !currencyConfig[country]) {
+                return; // Si no hay país seleccionado o no está en la configuración, no hacer nada
+            }
+            
+            const currency = currencyConfig[country];
+            
+            // Actualizar los precios en el resumen del pedido
+            document.getElementById('product1-price').textContent = 
+                `${currency.symbol}${(basePrices.product1 * currency.rate).toFixed(2)}`;
+            document.getElementById('product2-price').textContent = 
+                `${currency.symbol}${(basePrices.product2 * currency.rate).toFixed(2)}`;
+            document.getElementById('shipping-price').textContent = 
+                `${currency.symbol}${(basePrices.shipping * currency.rate).toFixed(2)}`;
+            
+            // Calcular el total
+            const total = (basePrices.product1 + basePrices.product2 + basePrices.shipping) * currency.rate;
+            document.getElementById('total-price').textContent = 
+                `${currency.symbol}${total.toFixed(2)}`;
+            
+            // Actualizar el formulario de PayPal con el nuevo total y moneda
+            document.querySelector('input[name="amount"]').value = total.toFixed(2);
+            document.querySelector('input[name="currency"]').value = currency.code;
+        }
+        
+        // Validación en tiempo real de los campos de tarjeta
+        cardFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            field.addEventListener('input', validateCardForm);
+            field.addEventListener('blur', function() {
+                validateField(this);
+            });
+        });
+        
+        // Validación del campo de correo de PayPal
+        paypalEmail.addEventListener('input', function() {
+            validatePaypalForm();
+            // Actualizar el campo oculto para el formulario de redirección
+            paypalHiddenEmail.value = paypalEmail.value;
+        });
+        
+        paypalEmail.addEventListener('blur', function() {
+            validateField(this);
+        });
+        
+        function switchPaymentMethod(method) {
+            // Remove active class from all methods
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Add active class to selected method
+            if (method === 'card') {
+                document.querySelectorAll('.payment-method')[0].classList.add('active');
+            } else {
+                document.querySelectorAll('.payment-method')[1].classList.add('active');
+            }
+            
+            // Hide all form sections
+            document.querySelectorAll('.form-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected form section
+            document.getElementById(method + '-form').classList.add('active');
+        }
+        
+        // Format card number with spaces
+        document.getElementById('card-number').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = '';
+            
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            
+            e.target.value = formattedValue;
+        });
+        
+        // Format expiry date
+        document.getElementById('expiry').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            
+            if (value.length > 2) {
+                e.target.value = value.slice(0, 2) + '/' + value.slice(2);
+            } else {
+                e.target.value = value;
+            }
+        });
+        
+        // Validar el formulario de tarjeta
+        function validateCardForm() {
+            let isValid = true;
+            
+            // Comprobar que todos los campos están rellenos
+            cardFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    isValid = false;
+                }
+            });
+            
+            // Habilitar o deshabilitar el botón según el resultado
+            cardPayButton.disabled = !isValid;
+        }
+        
+        // Validar el formulario de PayPal
+        function validatePaypalForm() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isValid = emailRegex.test(paypalEmail.value.trim());
+            
+            paypalButton.disabled = !isValid;
+        }
+        
+        // Validación de campo individual
+        function validateField(field) {
+            const errorElement = document.getElementById(field.id + '-error');
+            
+            if (!field.value.trim()) {
+                field.classList.add('error');
+                errorElement.style.display = 'block';
+                return false;
+            } else {
+                // Validaciones específicas para ciertos campos
+                if (field.id === 'paypal-email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(field.value.trim())) {
+                        field.classList.add('error');
+                        errorElement.style.display = 'block';
+                        return false;
+                    }
+                }
+                
+                if (field.id === 'card-number') {
+                    if (field.value.replace(/\s/g, '').length < 13) {
+                        field.classList.add('error');
+                        errorElement.style.display = 'block';
+                        return false;
+                    }
+                }
+                
+                if (field.id === 'expiry') {
+                    const expiryRegex = /^(0[1-9]|1[0-2])\/[0-9]{2}$/;
+                    if (!expiryRegex.test(field.value)) {
+                        field.classList.add('error');
+                        errorElement.style.display = 'block';
+                        return false;
+                    }
+                }
+                
+                if (field.id === 'cvv') {
+                    if (field.value.length < 3) {
+                        field.classList.add('error');
+                        errorElement.style.display = 'block';
+                        return false;
+                    }
+                }
+            }
+            
+            field.classList.remove('error');
+            errorElement.style.display = 'none';
+            return true;
+        }
+        
+        // Añadir evento de clic al botón
+        cardPayButton.addEventListener('click', function() {
+            let isValid = true;
+            
+            // Validar todos los campos antes de procesar el pago
+            cardFields.forEach(fieldId => {
+                if (!validateField(document.getElementById(fieldId))) {
+                    isValid = false;
+                }
+            });
+            
+            if (isValid) {
+                alert('¡Pago procesado correctamente!');
+                // Aquí iría el código para procesar el pago
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Cigarra •Musicc Bar•</title>
+    <!-- Bootstrap CSS -->
+    <!-- Incluir Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+
+    <!-- Incluir Bootstrap 5 JS (este archivo debe ir al final del body) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Añade esto en el head de tu documento HTML -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=EUR"></script>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Incluir jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .header-banner {
+            text-align: center;
+            padding: 60px 0;
+            color: #ffffff;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+            background-image: url('Imagenes/Monstera.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            position: relative;
+        }
+        
+        .header-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header-title {
+            margin: 0;
+            font-size: 3rem;
+            text-shadow: 0 0 10px #000, 0 0 20px #000;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            text-shadow: 0 0 10px #000, 0 0 20px #000;
+        }
+        
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+            display: none;
+        }
+        
+        .category-tab {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .menu-section.active {
+            display: block;
+        }
+        
+        .menu-item {
+            height: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-item.hidden {
+            display: none;
+        }
+        
+        .menu-item.highlighted {
+            box-shadow: 0 0 15px #4a6741cc;
+        }
+        
+        .item-image {
+            height: 200px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .item-name {
+            color: #4a6741;
+            font-weight: 600;
+        }
+        
+        .item-description {
+            color: #666;
+            font-size: 0.9rem;
+            min-height: 80px;
+        }
+        
+        .item-price {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #4a6741;
+        }
+        
+        .btn-primary {
+            background-color: #4a6741;
+            border-color: #4a6741;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5233;
+            border-color: #3a5233;
+        }
+        
+        .dietary-tag {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background-color: #eee;
+            margin-right: 5px;
+        }
+        
+        .tag-vegetarian {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .tag-vegan {
+            background-color: #e0f2f1;
+            color: #00695c;
+        }
+        
+        .tag-gluten-free {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+        
+        .tag-spicy {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .cart-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #4a6741;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Asegurando que los cards tengan la misma altura */
+        .card-deck .card {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="header-banner mb-4">
+            <div class="header-content">
+                <h1 class="header-title">La Cigarra</h1>
+                <div class="subtitle">•Music Bar•</div>
+            </div>x
+        </div>
+        
+        <!-- Buscador -->
+        <div class="search-container">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="searchBox" placeholder="Buscar en el menú...">
+                <button class="btn btn-primary" type="button" id="searchButton" onclick="searchMenu()">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+                <button class="btn btn-secondary" type="button" id="clearButton" onclick="clearSearch()">
+                    <i class="bi bi-x-circle"></i> Limpiar
+                </button>
+            </div>
+        </div>
+        <div id="noResults" class="no-results alert alert-secondary">No se encontraron resultados para tu búsqueda.</div>
+        
+        <!-- Tabs de categorías -->
+        <ul class="nav nav-pills mb-4 justify-content-center" id="menuTabs">
+            <li class="nav-item">
+                <a class="nav-link active category-tab" data-category="entradas" onclick="showCategory('entradas')" href="#">Entradas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link category-tab" data-category="principales" onclick="showCategory('principales')" href="#">Platos Fuertes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link category-tab" data-category="postres" onclick="showCategory('postres')" href="#">Sin alcohol</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link category-tab" data-category="bebidas" onclick="showCategory('bebidas')" href="#bebidas">Cervezas</a>
+            </li>
+        </ul>
+       <!-- Sección de Entradas -->
+<div id="entradas" class="menu-section active">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Tarjeta 1 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Guacamole.jpg" alt="Guacamole" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Guacamole</h5>
+                    <p class="card-text item-description">Puré de aguacates maduros con cilantro fresco, jugo de limón, jalapeños y cebolla crujiente, acompañado con totopos.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$100</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Guacamole', 100)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 2 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Nachos.jpg" alt="Ignacios con Queso" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Ignacios con Queso</h5>
+                    <p class="card-text item-description">Totopos, queso amarillo, aderezo chipotle, granos de elote y trocitos de tocino.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$115</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Ignacios con Queso', 115)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 3 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Tacos.jpg" alt="Taquitos Pueblito" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Taquitos Pueblito</h5>
+                    <p class="card-text item-description">6 Mini tacos de carne molida enchilada que llevaban los abuelitos a la milpa, acompañados con crema y salsa de mesa.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$89</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Taquitos Pueblito', 89)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 4 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Queso.jpg" alt="Queso Fundido" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Queso Fundido</h5>
+                    <p class="card-text item-description">Mezcla de quesos mexicanos fundidos con chorizo, rajas poblanas o champiñones. Acompañado con tortillas de maíz.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$125</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Queso Fundido', 125)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 5 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Alitas.jpeg" alt="Alitas BBQ" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Alitas BBQ</h5>
+                    <p class="card-text item-description">8 Alitas de pollo bañadas en salsa BBQ, acompañadas de bastones de apio y zanahoria con aderezo ranch.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$140</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Alitas BBQ', 140)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 6 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Tinga.jpg" alt="Tostadas de Tinga" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Tostadas de Tinga</h5>
+                    <p class="card-text item-description">3 Tostadas con pollo deshebrado en salsa de chipotle, lechuga, crema y queso fresco.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$95</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Tostadas de Tinga', 95)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 7 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Sopa.jpg" alt="Sopa de Tortilla" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Sopa de Tortilla</h5>
+                    <p class="card-text item-description">Caldo de jitomate con chile pasilla, juliana de tortilla frita, aguacate, queso panela y crema.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$85</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Sopa de Tortilla', 85)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 8 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Ceviche.jpg" alt="Ceviche Serrano" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Ceviche Serrano</h5>
+                    <p class="card-text item-description">Pescado blanco marinado en limón con jitomate, cebolla, cilantro y chile serrano. Servido con totopos.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$130</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Ceviche Serrano', 130)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 9 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Empanadas.jpg" alt="Empanadas de Queso" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Empanadas de Queso</h5>
+                    <p class="card-text item-description">4 Empanadas de masa de maíz rellenas de queso Oaxaca, acompañadas de salsa verde y crema.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$90</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Empanadas de Queso', 90)">Añadir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Platos Principales -->
+<div id="principales" class="menu-section">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Tarjeta 1 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Boloñesa.jpg" alt="Lasaña Boloñesa" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Lasaña Boloñesa</h5>
+                    <p class="card-text item-description">Pasta en laminas bañada en salsa Boloñesa, con queso mozzarella, oaxaca y gouda. Acompañada de ensalada y vinagreta de la casa.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$145</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Lasaña Boloñesa', 145)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 2 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Arrachera.jpg" alt="Hamburguesa de Arrachera" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Hamburguesa de Arrachera</h5>
+                    <p class="card-text item-description">200g. De corte arrachera, queso gouda, aderezo chipotle, lechuga, jitomate, cebolla morada y aguacate. Acompañada con papas fritas.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$185</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Hamburguesa de Arrachera', 185)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 3 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Hot Dog.jpg" alt="Jocho Monster" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Jocho Monster</h5>
+                    <p class="card-text item-description">Salchicha para asar rellena de queso, envuelta en tocino. Toppings: aderezo chipotle, catsup, mayonesa, aguacate, jitomate, mostaza, cebolla y ruffles.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$69</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Jocho Monster', 69)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 4 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Pasta Tocino.jpg" alt="Pasta Tocino" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Pasta Tocino</h5>
+                    <p class="card-text item-description">Cremosa salsa blanca y trozos de tocino. Acompañada de pan artesanal.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$119</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Pasta Tocino', 119)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 5 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Molcajete.jpeg" alt="Molcajete Mixto" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Molcajete Mixto</h5>
+                    <p class="card-text item-description">Arrachera, chorizo, pollo y nopales asados en salsa roja de molcajete. Acompañado de frijoles, queso y tortillas.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$275</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Molcajete Mixto', 275)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 6 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Enchiladas.jpg" alt="Enchiladas Suizas" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Enchiladas Suizas</h5>
+                    <p class="card-text item-description">5 Enchiladas de pollo bañadas en salsa verde cremosa, gratinadas con queso. Acompañadas de frijoles refritos.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$135</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Enchiladas Suizas', 135)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 7 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Chiles.jpg" alt="Chiles Rellenos" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Chiles Rellenos</h5>
+                    <p class="card-text item-description">2 Chiles poblanos rellenos de queso, capeados y bañados en salsa de jitomate. Servidos con arroz y frijoles.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$155</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Chiles Rellenos', 155)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 8 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Milanesa.jpg" alt="Milanesa Napolitana" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Milanesa Napolitana</h5>
+                    <p class="card-text item-description">Milanesa de res gratinada con jamón, queso y salsa de tomate. Acompañada de puré de papa y ensalada.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$195</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Milanesa Napolitana', 195)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 9 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Tacos de Pescado.jpg" alt="Tacos de Pescado" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Tacos de Pescado</h5>
+                    <p class="card-text item-description">3 Tacos de pescado capeado, con repollo morado, crema de chipotle y guacamole. Acompañados de arroz.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$165</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Tacos de Pescado', 165)">Añadir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Sin alcohol (Postres) -->
+<div id="postres" class="menu-section">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Tarjeta 1 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Piñada.jpg" alt="Piñada" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Piñada</h5>
+                    <p class="card-text item-description">Jugo de piña, crema de coco y leche condensada.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$98</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Piñada', 98)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 2 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Rusa.jpg" alt="Rusa" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Rusa</h5>
+                    <p class="card-text item-description">Trozos de piña, limon, chamoy y refresco de toronja.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$85</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Rusa', 85)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 3 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Smoothie.jpg" alt="Smoothie de Fruta de la región" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Smoothie de Fruta de la región</h5>
+                    <p class="card-text item-description">A elegir: Zarzamora de Pinal, Mango de Jalpan o Piña fresca.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$95</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Smoothie de Fruta de la región', 95)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 4 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Limonada.jpg" alt="Limonada Casera" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Limonada Casera</h5>
+                    <p class="card-text item-description">Jugo de limón fresco con agua mineral y azúcar. Opciones: natural, menta o fresa.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$65</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Limonada Casera', 65)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 5 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Te.jpg" alt="Té Chai" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Té Chai</h5>
+                    <p class="card-text item-description">Té negro con especias, leche y un toque de miel. Servido caliente o frío.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$75</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Té Chai', 75)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 6 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Jamaica.jpg" alt="Agua de Jamaica" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Agua de Jamaica</h5>
+                    <p class="card-text item-description">Refrescante agua de flor de jamaica con un toque de canela y piloncillo.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$55</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Agua de Jamaica', 55)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 7 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Chocolate.jpg" alt="Chocolate Caliente" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Chocolate Caliente</h5>
+                    <p class="card-text item-description">Chocolate mexicano artesanal preparado con leche y un toque de canela.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$80</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Chocolate Caliente', 80)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 8 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Cafe.jpeg" alt="Café de Olla" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Café de Olla</h5>
+                    <p class="card-text item-description">Café tradicional mexicano con canela y piloncillo, preparado en olla de barro.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$60</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Café de Olla', 60)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 9 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Tejate.jpg" alt="Tejate Oaxaqueño" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Tejate Oaxaqueño</h5>
+                    <p class="card-text item-description">Bebida ancestral de origen zapoteco elaborada con maíz, cacao, flor de mamey y rosita de cacao.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$90</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Tejate Oaxaqueño', 90)">Añadir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Cervezas -->
+<div id="bebidas" class="menu-section">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Tarjeta 1 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Michelada.jpg" alt="Michelín (1L)" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Michelín (1L)</h5>
+                    <p class="card-text item-description">Limon, salsa inglesa, salsa maggie, clamato, cerveza.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$135</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Michelín (1L)', 135)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 2 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Chancla.jpg" alt="Chancla Vieja (1/2L)" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Chancla Vieja (1/2L)</h5>
+                    <p class="card-text item-description">Limon, salsa inglesa, salsa maggie, clamato, cerveza.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$70</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Chancla Vieja (1/2L)', 70)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 3 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Monchshoff.jpg" alt="Monchshoff" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Monchshoff</h5>
+                    <p class="card-text item-description">(Importada) Alemania.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$205</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Monchshoff', 205)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 4 -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Buddha.jpg" alt="Lucky Buddha" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Lucky Buddha</h5>
+                    <p class="card-text item-description">(Importada) China.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$130</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Lucky Buddha', 130)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 5 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Corona.jpg" alt="Corona" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Corona</h5>
+                    <p class="card-text item-description">(Nacional) Cerveza clara tipo Pilsner.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$60</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Corona', 60)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 6 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Modelo.jpg" alt="Modelo Especial" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Modelo Especial</h5>
+                    <p class="card-text item-description">(Nacional) Cerveza tipo Pilsner-Vienna.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$65</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Modelo Especial', 65)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 7 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Negra.jpg" alt="Negra Modelo" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Negra Modelo</h5>
+                    <p class="card-text item-description">(Nacional) Cerveza oscura tipo Munich.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$70</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Negra Modelo', 70)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 8 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Heineken.jpg" alt="Heineken" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Heineken</h5>
+                    <p class="card-text item-description">(Importada) Holanda. Cerveza tipo Lager.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$75</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Heineken', 75)">Añadir</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta 9 (Nueva) -->
+        <div class="col">
+            <div class="card menu-item h-100">
+                <div class="item-image">
+                    <img src="./Imagenes/Artesanal.jpg" alt="Cerveza Artesanal Local" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title item-name">Cerveza Artesanal Local</h5>
+                    <p class="card-text item-description">Cerveza artesanal de la Sierra Gorda. Pregunte por nuestras variedades disponibles.</p>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                    <span class="item-price">$95</span>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('Cerveza Artesanal Local', 95)">Añadir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- API de Google Maps -->
+<script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&callback=initMap" async defer></script>
+
+<script>
+    // Función para inicializar el mapa
+    function initMap() {
+        // Coordenadas de La Cigarra Music Bar (estas son de ejemplo, reemplázalas por las coordenadas reales)
+        const lacigarraLocation = { lat: 20.588793, lng: -100.389465 };
+        
+        // Crear el mapa
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: lacigarraLocation,
+        });
+        
+        // Añadir marcador
+        const marker = new google.maps.Marker({
+            position: lacigarraLocation,
+            map: map,
+            title: "La Cigarra Music Bar",
+        });
+    }
+</script>
+
+<!-- Sección Ubicación con Google Maps -->
+<div id="ubicacion" class="container py-5">
+    <h2 class="text-center mb-4">Encuéntranos</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+        <div class="col-md-6">
+            <h4>La Cigarra Music Bar</h4>
+            <p><i class="bi bi-geo-alt-fill"></i>Calle José María Morelos, Jalpan, Mexico</p>
+            <p><i class="bi bi-telephone-fill"></i> Tel.: 441 107 0285</p>
+            <p><i class="bi bi-clock-fill"></i> Horario:</p>
+            <ul>
+                <li>Martes a Domingo de 4:00 p.m a 1:00 a.m</li>
+            </ul>
+            <a href="https://maps.google.com/?q=La+Cigarra+Music+Bar" class="btn btn-primary" target="_blank">
+                Cómo llegar
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Políticas de Privacidad -->
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="privacyModalLabel">Políticas de Privacidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Política de Privacidad de La Cigarra Music Bar</h6>
+                <p><strong>Última actualización:</strong> 7 de abril de 2025</p>
+                
+                <h6>1. Información que recopilamos</h6>
+                <p>En La Cigarra Music Bar, podemos recopilar la siguiente información cuando utiliza nuestra aplicación:</p>
+                <ul>
+                    <li>Información de pedidos: los artículos que ordena, la fecha y hora de su pedido.</li>
+                </ul>
+                
+                <h6>2. Cómo utilizamos su información</h6>
+                <p>Utilizamos la información recopilada para:</p>
+                <ul>
+                    <li>Procesar y completar sus pedidos.</li>
+                    <li>Mejorar nuestros servicios y la experiencia del usuario.</li>
+                    <li>Análisis interno y mejora de nuestros productos y servicios.</li>
+                </ul>
+                
+                <h6>3. Protección de datos</h6>
+                <p>Nos tomamos muy en serio la seguridad de su información. Implementamos medidas técnicas y organizativas para proteger sus datos contra el acceso no autorizado o la pérdida accidental.</p>
+                
+                <h6>4. Cookies y tecnologías similares</h6>
+                <p>Nuestra aplicación puede utilizar cookies y tecnologías similares para mejorar su experiencia. Puede configurar su navegador para rechazar todas las cookies, pero esto podría afectar la funcionalidad de la aplicación.</p>
+                
+                <h6>5. Sus derechos</h6>
+                <p>Usted tiene derecho a:</p>
+                <ul>
+                    <li>Acceder a sus datos personales.</li>
+                    <li>Rectificar información inexacta.</li>
+                    <li>Solicitar la eliminación de sus datos.</li>
+                    <li>Oponerse al procesamiento de sus datos.</li>
+                </ul>
+                
+                <h6>6. Contacto</h6>
+                <p>Si tiene preguntas sobre nuestra política de privacidad, contáctenos en privacidad@lacigarrabar.com o visite nuestro establecimiento.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Términos y Condiciones -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Términos y Condiciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Términos y Condiciones de La Cigarra Music Bar</h6>
+                <p><strong>Última actualización:</strong> 7 de abril de 2025</p>
+                
+                <h6>1. Aceptación de los Términos</h6>
+                <p>Al utilizar nuestra aplicación y servicios, usted acepta estos términos y condiciones en su totalidad. Si no está de acuerdo con estos términos, no debe utilizar nuestra aplicación.</p>
+                
+                <h6>2. Política de Pedidos</h6>
+                <p>Los pedidos realizados a través de nuestra aplicación están sujetos a:</p>
+                <ul>
+                    <li>Disponibilidad de productos en el momento de la preparación.</li>
+                    <li>Confirmación final por parte de nuestro personal.</li>
+                    <li>Horarios de atención del establecimiento.</li>
+                </ul>
+                
+                <h6>3. Precios y Pagos</h6>
+                <p>Los precios mostrados en la aplicación están expresados en pesos mexicanos e incluyen IVA. Nos reservamos el derecho de modificar los precios sin previo aviso.</p>
+                
+                <h6>4. Cancelaciones</h6>
+                <p>Una vez confirmado el pedido, las cancelaciones estarán sujetas a las siguientes condiciones:</p>
+                <ul>
+                    <li>Si el pedido aún no ha sido preparado, podrá ser cancelado sin costo.</li>
+                    <li>Si el pedido ya está en preparación, no será posible cancelarlo.</li>
+                </ul>
+                
+                <h6>5. Edad Mínima</h6>
+                <p>Para consumir bebidas alcohólicas en nuestro establecimiento, debe ser mayor de 18 años. Nos reservamos el derecho de solicitar identificación oficial.</p>
+                
+                <h6>6. Comportamiento</h6>
+                <p>Nos reservamos el derecho de admisión y de solicitar a cualquier cliente que abandone el establecimiento si su comportamiento afecta negativamente a otros clientes.</p>
+                
+                <h6>7. Modificaciones</h6>
+                <p>Nos reservamos el derecho de modificar estos términos y condiciones en cualquier momento. Los cambios entrarán en vigor inmediatamente después de su publicación.</p>
+                
+                <h6>8. Contacto</h6>
+                <p>Si tiene preguntas sobre nuestros términos y condiciones, contáctenos en info@lacigarrabar.com o visite nuestro establecimiento.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="py-4 mt-5 border-top">
+    <div class="row">
+        <div class="col-12 text-center">
+            <p class="mb-1">&copy; 2025 La Cigarra Music Bar. Todos los derechos reservados.</p>
+            <p class="mb-0">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Políticas de Privacidad</a> | 
+                <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Términos y Condiciones</a> | 
+                <a href="#" data-bs-toggle="modal" data-bs-target="#wineListModal">Carta de Cervezas</a>
+            </p>
+        </div>
+    </div>
+</footer>
+
+    <!-- Botón del carrito flotante -->
+    <div class="cart-button" onclick="showCart()">
+        <i class="bi bi-cart"></i>
+        <span class="cart-count">0</span>
+    </div>
+    
+    <!-- Modal del carrito -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Tu pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="cartItems">
+                    <!-- Los items del carrito se insertarán aquí -->
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex justify-content-between w-100">
+                        <h5>Total: $<span id="cartTotal">0.00</span></h5>
+                        <button type="button" class="btn btn-primary" onclick="confirmOrder()">Pedir ahora</button>
+                        <button id="btn-pagar" class="btn btn-primary" href="Pagos/pagos.html">Pagar</button>
+
+<script>
+document.getElementById('btn-pagar').addEventListener('click', function() {
+    window.location.href = 'Pagos/pagos.html'; // O checkout.php si lo prefieres
+});
+</script>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- Modal de confirmación de pedido -->
+    <div class="modal fade" id="orderConfirmModal" tabindex="-1" aria-labelledby="orderConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderConfirmModalLabel">¡Pedido confirmado!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tu pedido ha sido recibido y será preparado en breve.</p>
+                    <p>Número de orden: <strong id="orderNumber"></strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para mostrar carta de vinos -->
+    <div class="modal fade" id="wineListModal" tabindex="-1" aria-labelledby="wineListModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wineListModalLabel">Nuestra carta de cervezas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Cervezas Importadas</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Monchshoff (Alemania)
+                                    <span class="badge bg-primary rounded-pill">$205</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Lucky Buddha (China)
+                                    <span class="badge bg-primary rounded-pill">$130</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Guinness (Irlanda)
+                                    <span class="badge bg-primary rounded-pill">$140</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Cervezas Artesanales</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Cucapá Honey (México)
+                                    <span class="badge bg-primary rounded-pill">$95</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Minerva Stout (México)
+                                    <span class="badge bg-primary rounded-pill">$90</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Colimita (México)
+                                    <span class="badge bg-primary rounded-pill">$85</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap Bundle con Popper -->
+    <script> src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+       // Complete searchMenu function
+// Variables globales
+let cartItems = [];
+let cartCount = 0;
+let cartModal;
+let orderConfirmModal;
+let wineListModal;
+
+// Inicializar componentes de Bootstrap cuando el DOM esté cargado
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar los modales
+    cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+    orderConfirmModal = new bootstrap.Modal(document.getElementById('orderConfirmModal'));
+    wineListModal = new bootstrap.Modal(document.getElementById('wineListModal'));
+    
+    // Añadir event listener para búsqueda al presionar Enter
+    document.getElementById('searchBox').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchMenu();
+        }
+    });
+    
+    // Event listeners para las pestañas de categorías
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            showCategory(this.getAttribute('data-category'));
+        });
+    });
+
+    // Asegurar que los botones de añadir
+    document.querySelectorAll('.btn-primary[onclick^="addToCart"]').forEach(button => {
+        const originalOnclick = button.getAttribute('onclick');
+        button.removeAttribute('onclick');
+        
+        // Extrae los parámetros de la función original
+        const match = originalOnclick.match(/addToCart\('([^']+)',\s*(\d+)\)/);
+        if (match) {
+            const itemName = match[1];
+            const price = parseInt(match[2]);
+            
+            button.addEventListener('click', function() {
+                addToCart(itemName, price);
+            });
+        }
+    });
+
+    // Si hay un botón para mostrar la carta de vinos
+    const wineListButton = document.getElementById('wineListButton');
+    if (wineListButton) {
+        wineListButton.addEventListener('click', showWineList);
+    }
+});
+
+// Función de búsqueda
+function searchMenu() {
+    const searchTerm = document.getElementById('searchBox').value.toLowerCase().trim();
+    const noResultsDiv = document.getElementById('noResults');
+    
+    if (searchTerm === '') {
+        resetSearch();
+        return;
+    }
+    
+    // Muestra todas las secciones para la búsqueda
+    document.querySelectorAll('.menu-section').forEach(section => {
+        section.classList.add('active');
+    });
+    
+    // Desactivar las pestañas durante la búsqueda
+    document.querySelectorAll('.nav-link').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    let foundItems = 0;
+    
+    // Buscar en todos los elementos del menú
+    document.querySelectorAll('.menu-item').forEach(item => {
+        const itemName = item.querySelector('.item-name').textContent.toLowerCase();
+        const itemDesc = item.querySelector('.item-description').textContent.toLowerCase();
+        
+        if (itemName.includes(searchTerm) || itemDesc.includes(searchTerm)) {
+            item.classList.remove('hidden');
+            item.classList.add('highlighted');
+            foundItems++;
+        } else {
+            item.classList.add('hidden');
+            item.classList.remove('highlighted');
+        }
+    });
+    
+    // Mostrar mensaje de "No se encontraron resultados" si es necesario
+    if (foundItems === 0) {
+        noResultsDiv.style.display = 'block';
+    } else {
+        noResultsDiv.style.display = 'none';
+    }
+}
+
+// Función para resetear la búsqueda
+function resetSearch() {
+    // Resetear todas las clases de los elementos del menú
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.remove('hidden');
+        item.classList.remove('highlighted');
+    });
+    
+    // Ocultar mensaje de "No se encontraron resultados"
+    document.getElementById('noResults').style.display = 'none';
+    
+    // Mostrar solo la categoría activa
+    document.querySelectorAll('.menu-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Activar la primera pestaña por defecto
+    const activeTab = document.querySelector('.category-tab.active');
+    if (activeTab) {
+        showCategory(activeTab.getAttribute('data-category'));
+    } else {
+        document.querySelector('.category-tab').classList.add('active');
+        showCategory(document.querySelector('.category-tab').getAttribute('data-category'));
+    }
+}
+// Función para limpiar la búsqueda
+function clearSearch() {
+    // Limpiar la caja de búsqueda
+    document.getElementById('searchBox').value = '';
+    
+    // Resetear la visualización de los elementos
+    resetSearch();
+}
+
+// Función para mostrar categoría
+function showCategory(category) {
+    // Desactivar todas las pestañas
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Activar la pestaña seleccionada
+    document.querySelector(`.category-tab[data-category="${category}"]`).classList.add('active');
+    
+    // Ocultar todas las secciones
+    document.querySelectorAll('.menu-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Mostrar la sección seleccionada
+    document.getElementById(category).classList.add('active');
+    
+    // Resetear filtros de búsqueda
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.remove('hidden');
+        item.classList.remove('highlighted');
+    });
+    
+    // Limpiar la caja de búsqueda
+    document.getElementById('searchBox').value = '';
+    
+    // Ocultar mensaje de no resultados
+    document.getElementById('noResults').style.display = 'none';
+}
+
+// Funciones para el carrito
+function addToCart(itemName, price) {
+    const existingItem = cartItems.find(item => item.name === itemName);
+    
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cartItems.push({
+            name: itemName,
+            price: price,
+            quantity: 1
+        });
+    }
+    
+    updateCartCount();
+    
+    // Mostrar una pequeña notificación
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success position-fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.zIndex = '9999';
+    notification.style.opacity = '0';
+    notification.style.transition = 'opacity 0.3s ease';
+    notification.innerHTML = `<strong>${itemName}</strong> añadido al carrito`;
+    
+    document.body.appendChild(notification);
+    
+    // Mostrar y ocultar la notificación
+    setTimeout(() => {
+        notification.style.opacity = '1';
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 2000);
+    }, 100);
+}
+
+function updateCartCount() {
+    cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+    document.querySelector('.cart-count').textContent = cartCount;
+}
+
+function showCart() {
+    if (cartItems.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+    }
+    
+    const cartItemsContainer = document.getElementById('cartItems');
+    cartItemsContainer.innerHTML = '';
+    
+    let total = 0;
+    
+    cartItems.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        const itemElement = document.createElement('div');
+        itemElement.className = 'd-flex justify-content-between align-items-center mb-2';
+        itemElement.innerHTML = `
+            <div>
+                <h6 class="mb-0">${item.name}</h6>
+                <small class="text-muted">$${item.price} x ${item.quantity}</small>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="btn-group btn-group-sm me-2" role="group">
+                    <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity('${item.name}', -1)">-</button>
+                    <span class="px-2 d-flex align-items-center">${item.quantity}</span>
+                    <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity('${item.name}', 1)">+</button>
+                </div>
+                <span class="fw-bold me-2">$${itemTotal}</span>
+                <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart('${item.name}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+        
+        cartItemsContainer.appendChild(itemElement);
+    });
+    
+    document.getElementById('cartTotal').textContent = total.toFixed(2);
+    
+    // Abre el modal si el carrito no está vacío
+    var myModal = new bootstrap.Modal(document.getElementById('cartModal'));
+    myModal.show();
+}
+
+
+function updateCartDisplay() {
+    // Actualiza la vista del carrito sin abrir el modal
+    const cartItemsContainer = document.getElementById('cartItems');
+    cartItemsContainer.innerHTML = '';
+
+    let total = 0;
+
+    cartItems.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        const itemElement = document.createElement('div');
+        itemElement.className = 'd-flex justify-content-between align-items-center mb-2';
+        itemElement.innerHTML = `
+            <div>
+                <h6 class="mb-0">${item.name}</h6>
+                <small class="text-muted">$${item.price} x ${item.quantity}</small>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="btn-group btn-group-sm me-2" role="group">
+                    <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity('${item.name}', -1)">-</button>
+                    <span class="px-2 d-flex align-items-center">${item.quantity}</span>
+                    <button type="button" class="btn btn-outline-secondary" onclick="adjustQuantity('${item.name}', 1)">+</button>
+                </div>
+                <span class="fw-bold me-2">$${itemTotal}</span>
+                <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart('${item.name}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+        
+        cartItemsContainer.appendChild(itemElement);
+    });
+
+    document.getElementById('cartTotal').textContent = total.toFixed(2);
+}
+
+
+function adjustQuantity(itemName, change) {
+    const item = cartItems.find(item => item.name === itemName);
+    
+    if (item) {
+        item.quantity += change;
+        
+        if (item.quantity <= 0) {
+            removeFromCart(itemName);
+        } else {
+            updateCartCount();
+            // No es necesario llamar a showCart() aquí, solo actualizar el carrito
+            updateCartDisplay(); // Puedes crear una función para actualizar la vista
+        }
+    }
+}
+
+
+function removeFromCart(itemName) {
+    const index = cartItems.findIndex(item => item.name === itemName);
+    
+    if (index !== -1) {
+        cartItems.splice(index, 1);
+        updateCartCount();
+        showCart(); // Actualizar el modal o cerrarlo si está vacío
+        
+        if (cartItems.length === 0) {
+            cartModal.hide();
+        }
+    }
+}
+
+function confirmOrder() {
+    if (cartItems.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+    }
+    
+    // Generar número de orden aleatorio
+    const orderNumber = Math.floor(Math.random() * 1000) + 1000;
+    document.getElementById('orderNumber').textContent = orderNumber;
+    
+    cartModal.hide();
+    
+    // Pequeño retraso para mejorar la experiencia del usuario
+    setTimeout(() => {
+        orderConfirmModal.show();
+        
+        // Limpiar carrito después de confirmar orden
+        cartItems = [];
+        updateCartCount();
+    }, 300);
+}
+
+function showWineList() {
+    wineListModal.show();
+}
+            </script>
